@@ -75,7 +75,6 @@ const QuickLinks: FC = () => {
           {quickLinks.map((link, index) => (
             <motion.div
               key={link.title}
-              variants={cardVariants}
               custom={index}
               className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer border border-white/5"
             >
