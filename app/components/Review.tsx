@@ -1,9 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Quote, Volume2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, Volume2 } from "lucide-react";
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Review {
   id: number;
@@ -61,13 +61,14 @@ const reviews: Review[] = [
 const VideoReview: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % reviews.length);
-  };
+  // Auto slide every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
+    }, 3000);
 
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
-  };
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -76,94 +77,80 @@ const VideoReview: FC = () => {
   return (
     <section className="py-24 bg-[#0f0a05] px-6" id="কাস্টমারদের চোখে আমরা">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-2xl">
-            <motion.h2
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-serif mb-4 bg-gradient-to-r from-white to-[#ffcc33] bg-clip-text text-transparent"
-            >
-              কাস্টমারদের চোখে আমরা
-            </motion.h2>
-            <p className="text-white/50 italic">মুহূর্তের সেরা কিছু রিভিউ</p>
-          </div>
+        {/* Header - Centered on all devices */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl font-serif mb-4 bg-gradient-to-r from-white to-[#ffcc33] bg-clip-text text-transparent"
+          >
+            কাস্টমারদের চোখে আমরা
+          </motion.h2>
+          <p className="text-white/50 italic text-lg">
+            মুহূর্তের সেরা কিছু রিভিউ
+          </p>
 
-          <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-            <Volume2 size={14} className="text-[#ffcc33]" />
-            <span className="text-[10px] uppercase tracking-widest text-white/60">
-              Real stories from real customers
+          {/* Volume Badge */}
+          <div className="mt-6 flex items-center gap-2 bg-white/5 px-5 py-2.5 rounded-full border border-white/10">
+            <Volume2 size={16} className="text-[#ffcc33]" />
+            <span className="text-xs uppercase tracking-widest text-white/60">
+              REAL STORIES FROM REAL CUSTOMERS
             </span>
           </div>
         </div>
 
-        {/* Slider Container */}
-        <div className="relative">
-          <div className="overflow-hidden">
+        {/* Main Review Card */}
+        <div className="relative min-h-[420px] flex items-center justify-center">
+          <div className="overflow-hidden w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="text-center px-6"
+                initial={{ opacity: 0, x: 60, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -60, scale: 0.95 }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
+                className="text-center px-4"
               >
-                <Quote className="text-[#ffcc33]/20 w-16 h-16 mx-auto mb-10" />
+                <Quote className="text-[#ffcc33]/20 w-20 h-20 mx-auto mb-8" />
 
                 {/* Stars */}
-                <div className="flex gap-2 mb-10 justify-center">
+                <div className="flex gap-1.5 mb-10 justify-center">
                   {[...Array(reviews[currentIndex].rating)].map((_, i) => (
-                    <Star key={i} size={26} className="text-[#ffcc33] fill-[#ffcc33]" />
+                    <Star key={i} size={32} className="text-[#ffcc33] fill-[#ffcc33]" />
                   ))}
                 </div>
 
                 {/* Comment */}
-                <p className="text-white/90 text-[18px] md:text-[21px] leading-relaxed italic font-light max-w-3xl mx-auto">
-                  "{reviews[currentIndex].comment}"
-                </p>
+                <div className="max-w-3xl mx-auto">
+                  <p className="text-white/90 text-[19px] md:text-[22px] leading-relaxed italic font-light px-4">
+                    "{reviews[currentIndex].comment}"
+                  </p>
+                </div>
 
-                {/* Name & Role */}
-                <div className="mt-14">
-                  <h4 className="text-white font-semibold text-2xl tracking-wide">
+                {/* Author */}
+                <div className="mt-16">
+                  <h4 className="text-white font-semibold text-[26px] tracking-wide">
                     {reviews[currentIndex].name}
                   </h4>
-                  <p className="text-[#ffcc33] text-sm uppercase tracking-[0.125em] mt-2">
+                  <p className="text-[#ffcc33] text-sm uppercase tracking-[0.125em] mt-1">
                     {reviews[currentIndex].role}
                   </p>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all backdrop-blur-md border border-white/10"
-            aria-label="Previous review"
-          >
-            <ChevronLeft size={28} />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all backdrop-blur-md border border-white/10"
-            aria-label="Next review"
-          >
-            <ChevronRight size={28} />
-          </button>
         </div>
 
         {/* Dots Indicator */}
-        <div className="flex justify-center gap-3 mt-12">
+        <div className="flex justify-center gap-4 mt-16">
           {reviews.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                ? "bg-[#ffcc33] scale-125"
-                : "bg-white/30 hover:bg-white/50"
+                  ? "bg-[#ffcc33] scale-125 shadow-[0_0_15px_#ffcc33]"
+                  : "bg-white/30 hover:bg-white/60"
                 }`}
               aria-label={`Go to review ${index + 1}`}
             />
@@ -171,11 +158,11 @@ const VideoReview: FC = () => {
         </div>
 
         {/* Recommendation Banner */}
-        <div className="mt-20 text-center">
-          <div className="inline-flex items-center gap-3 bg-white/5 px-8 py-4 rounded-full border border-white/10">
+        <div className="mt-20 flex justify-center">
+          <div className="inline-flex items-center gap-4 bg-white/5 px-8 py-4 rounded-full border border-white/10">
             <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} size={24} className="text-[#ffcc33] fill-[#ffcc33]" />
+                <Star key={i} size={26} className="text-[#ffcc33] fill-[#ffcc33]" />
               ))}
             </div>
             <span className="text-white/90 font-medium text-xl">
