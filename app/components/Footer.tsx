@@ -19,7 +19,9 @@ const Footer: FC = () => {
           </p>
           <div className="flex space-x-5 text-white/50">
             <Instagram size={20} className="hover:text-[#ffcc33] cursor-pointer transition-colors" />
-            <Facebook size={20} className="hover:text-[#ffcc33] cursor-pointer transition-colors" />
+            <a href="https://www.facebook.com/profile.php?id=61585209115393" target="_blank" rel="noopener noreferrer">
+              <Facebook size={20} className="hover:text-[#ffcc33] cursor-pointer transition-colors" />
+            </a>
             <Twitter size={20} className="hover:text-[#ffcc33] cursor-pointer transition-colors" />
           </div>
         </div>
@@ -30,11 +32,11 @@ const Footer: FC = () => {
           <div className="space-y-4 text-sm font-light text-white/70">
             <p className="flex items-start space-x-3">
               <MapPin size={18} className="mt-1 flex-shrink-0 text-[#ffcc33]" />
-              <span>H Block, Rd Number 6, <br />Mirpur 2, Dhaka 1216, Bangladesh</span>
+              <span>Tarakanda, Mymensingh <br />Bangladesh</span>
             </p>
             <p className="flex items-center space-x-3">
               <Phone size={18} className="flex-shrink-0 text-[#ffcc33]" />
-              <span>+880 1740-526198</span>
+              <span>+880 1611-348685</span>
             </p>
             <p className="flex items-center space-x-3">
               <Mail size={18} className="flex-shrink-0 text-[#ffcc33]" />

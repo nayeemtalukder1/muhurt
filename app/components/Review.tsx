@@ -1,15 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Star, Quote, Volume2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, Quote, Volume2, ChevronLeft, ChevronRight } from "lucide-react";
 import type { FC } from "react";
+import { useState } from "react";
 
 interface Review {
   id: number;
   name: string;
   role: string;
-  videoUrl: string;
-  thumbnail: string;
   rating: number;
   comment: string;
 }
@@ -17,37 +16,66 @@ interface Review {
 const reviews: Review[] = [
   {
     id: 1,
-    name: "Tanvir Ahmed",
-    role: "Food Blogger",
-    videoUrl: "/reviews/review1.mp4",
-    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    name: "Apurbo Shorker",
+    role: "Customer",
     rating: 5,
-    comment: "হাঁসের মাংস আর চাউলের রুটি জাস্ট অসাধারণ ছিল!",
+    comment: "বন্ধু হিসেবে নয় মন থেকে বলছি দুস্ত তোর দোকানের চা থেকে শুরু করে জুস এমনকি লাচ্ছি আইটেম গুলোওর মানও আলহামদুলিল্লাহ অনেক ভালো দোয়া করি বন্ধু",
   },
   {
     id: 2,
-    name: "Sajid Hasan",
-    role: "Regular Customer",
-    videoUrl: "/reviews/review2.mp4",
-    thumbnail: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=800",
+    name: "Sayem Sarkar",
+    role: "Customer",
     rating: 5,
-    comment: "Best cold coffee in town. The ambiance is so peaceful.",
+    comment: "কিছু একটা আছে আপনার হাতে নাহলে এতো সুন্দর করে কেউ চা বানায়",
   },
   {
     id: 3,
-    name: "Nusrat Jahan",
-    role: "Influencer",
-    videoUrl: "/reviews/review3.mp4",
-    thumbnail: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800",
+    name: "Md Josim Ahammed",
+    role: "Customer",
     rating: 5,
-    comment: "পরিবেশ এবং খাবার—দুটোই ১০ এ ১০!",
+    comment: "এই ফাস্ট টাইম তারাকান্দা এতো ভালো মানের চা খাইলাম আলহামদুলিল্লাহ আপনার চায়ের মান অনেক উন্নত...",
+  },
+  {
+    id: 4,
+    name: "S. Sabbir",
+    role: "Customer",
+    rating: 5,
+    comment: "আলহামদুলিল্লাহ আপনার দোকানের চায়ের মান ভালো আছে",
+  },
+  {
+    id: 5,
+    name: "আবরার লাভীব",
+    role: "Customer",
+    rating: 5,
+    comment: "এক কাপ চা, এক মুঠো শান্তি....",
+  },
+  {
+    id: 6,
+    name: "Shuvo Xoy",
+    role: "Customer",
+    rating: 5,
+    comment: "এক কাপ চা, এক ঝলক শান্তি ☕😌\nধন্যবাদ : মুহুর্ত - Muhurt",
   },
 ];
 
 const VideoReview: FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % reviews.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
   return (
     <section className="py-24 bg-[#0f0a05] px-6" id="কাস্টমারদের চোখে আমরা">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
@@ -64,68 +92,96 @@ const VideoReview: FC = () => {
 
           <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
             <Volume2 size={14} className="text-[#ffcc33]" />
-            <span className="text-[10px] uppercase tracking-widest text-white/60">Videos play muted by default</span>
+            <span className="text-[10px] uppercase tracking-widest text-white/60">
+              Real stories from real customers
+            </span>
           </div>
         </div>
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map((review, index) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-              className="group relative bg-white/5 rounded-3xl overflow-hidden border border-white/10 hover:border-[#ffcc33]/40 transition-all duration-500 shadow-2xl"
-            >
-              {/* Auto-playing Video Container */}
-              <div className="relative h-80 overflow-hidden">
-                <video
-                  src={review.videoUrl}
-                  poster={review.thumbnail} // Shows thumbnail while loading
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
+        {/* Slider Container */}
+        <div className="relative">
+          <div className="overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="text-center px-6"
+              >
+                <Quote className="text-[#ffcc33]/20 w-16 h-16 mx-auto mb-10" />
 
-                {/* Overlay for branding */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#0f0a05]/80" />
-
-                {/* Play Icon (Visual Only for Autoplay) */}
-                <div className="absolute top-4 right-4">
-                  <div className="w-8 h-8 bg-[#ffcc33]/20 backdrop-blur-md rounded-full flex items-center justify-center border border-[#ffcc33]/40">
-                    <div className="w-2 h-2 bg-[#ffcc33] rounded-full animate-pulse" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Review Content */}
-              <div className="p-8 pt-4 relative">
-                <Quote className="absolute -top-6 right-8 text-[#ffcc33]/10 w-16 h-16" />
-
-                <div className="flex gap-1 mb-4">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} size={12} className="text-[#ffcc33] fill-[#ffcc33]" />
+                {/* Stars */}
+                <div className="flex gap-2 mb-10 justify-center">
+                  {[...Array(reviews[currentIndex].rating)].map((_, i) => (
+                    <Star key={i} size={26} className="text-[#ffcc33] fill-[#ffcc33]" />
                   ))}
                 </div>
 
-                <p className="text-white/90 mb-6 italic font-light leading-relaxed text-sm md:text-base">
-                  "{review.comment}"
+                {/* Comment */}
+                <p className="text-white/90 text-[18px] md:text-[21px] leading-relaxed italic font-light max-w-3xl mx-auto">
+                  "{reviews[currentIndex].comment}"
                 </p>
 
-                <div className="flex items-center gap-4">
-                  <div className="h-10 w-[1px] bg-gradient-to-b from-[#ffcc33] to-transparent" />
-                  <div>
-                    <h4 className="text-white font-bold text-sm tracking-wide">{review.name}</h4>
-                    <p className="text-[#ffcc33] text-[10px] uppercase tracking-[0.2em] font-medium">{review.role}</p>
-                  </div>
+                {/* Name & Role */}
+                <div className="mt-14">
+                  <h4 className="text-white font-semibold text-2xl tracking-wide">
+                    {reviews[currentIndex].name}
+                  </h4>
+                  <p className="text-[#ffcc33] text-sm uppercase tracking-[0.125em] mt-2">
+                    {reviews[currentIndex].role}
+                  </p>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all backdrop-blur-md border border-white/10"
+            aria-label="Previous review"
+          >
+            <ChevronLeft size={28} />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all backdrop-blur-md border border-white/10"
+            aria-label="Next review"
+          >
+            <ChevronRight size={28} />
+          </button>
+        </div>
+
+        {/* Dots Indicator */}
+        <div className="flex justify-center gap-3 mt-12">
+          {reviews.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                ? "bg-[#ffcc33] scale-125"
+                : "bg-white/30 hover:bg-white/50"
+                }`}
+              aria-label={`Go to review ${index + 1}`}
+            />
           ))}
+        </div>
+
+        {/* Recommendation Banner */}
+        <div className="mt-20 text-center">
+          <div className="inline-flex items-center gap-3 bg-white/5 px-8 py-4 rounded-full border border-white/10">
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={24} className="text-[#ffcc33] fill-[#ffcc33]" />
+              ))}
+            </div>
+            <span className="text-white/90 font-medium text-xl">
+              100% recommend (6 Reviews)
+            </span>
+          </div>
         </div>
       </div>
     </section>

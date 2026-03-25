@@ -36,7 +36,7 @@ const MainChef: FC = () => {
               transition={{ delay: 0.5, type: "spring" }}
               className="absolute top-8 left-8 bg-[#ffcc33] text-black p-4 rounded-full w-24 h-24 flex flex-col items-center justify-center text-center shadow-xl"
             >
-              <span className="text-xl font-bold leading-none">১২+</span>
+              <span className="text-xl font-bold leading-none">২+</span>
               <span className="text-[10px] uppercase font-bold tracking-tighter">বছরের অভিজ্ঞতা</span>
             </motion.div>
           </motion.div>
