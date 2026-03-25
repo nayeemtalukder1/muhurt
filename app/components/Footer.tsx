@@ -40,7 +40,7 @@ const Footer: FC = () => {
             </p>
             <p className="flex items-center space-x-3">
               <Mail size={18} className="flex-shrink-0 text-[#ffcc33]" />
-              <span>hello@muhurtocafe.com</span>
+              <span>mdarifuddinvai@gmail.com</span>
             </p>
           </div>
         </div>

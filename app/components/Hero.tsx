@@ -16,7 +16,7 @@ const Hero: FC = () => {
           className="w-full h-full object-cover scale-105"
           style={{ filter: "brightness(0.7) contrast(1.1)" }}
         >
-          <source src="/hero-video.mp4" type="video/mp4" />
+          <source src="/hero-vid.mp4" type="video/mp4" />
           <img
             src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1920"
             alt="Warm kitchen cooking scene"

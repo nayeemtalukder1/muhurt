@@ -15,7 +15,7 @@ const quickLinks: QuickLink[] = [
     tag: "তাজা উপকরণ",
     title: "বিশুদ্ধ স্বাদ",
     subtitle: "দেশি-বিদেশি মশলার সঠিক মিশ্রণে তৈরি সেরা সব স্বাদ।",
-    img: "/tp.jpg",
+    img: "/tp.jpeg",
   },
   {
     tag: "আভিজাত্য",
